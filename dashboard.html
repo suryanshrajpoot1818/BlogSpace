@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | BlogSpace</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<header>
+    <nav class="navbar">
+
+        <a href="index.html" class="logo">
+            Blog<span>Space</span>
+        </a>
+
+        <ul class="nav-links" id="navLinks">
+
+            <li>
+                <a href="index.html">Home</a>
+            </li>
+
+            <li>
+                <a href="index.html#blogs">Blogs</a>
+            </li>
+
+            <li>
+                <a href="dashboard.html" class="active">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="create-blog.html">
+                    Create Blog
+                </a>
+            </li>
+
+            <li>
+                <button class="logout-btn" id="logoutBtn">
+                    Logout
+                </button>
+            </li>
+
+        </ul>
+
+        <button class="menu-btn" id="menuBtn">
+            ☰
+        </button>
+
+    </nav>
+</header>
+
+
+<!-- DASHBOARD -->
+
+<main class="dashboard-page">
+
+    <div class="dashboard-container">
+
+        <!-- WELCOME -->
+
+        <section class="dashboard-header">
+
+            <div>
+
+                <p class="section-small">
+                    YOUR DASHBOARD
+                </p>
+
+                <h1>
+                    Welcome,
+                    <span id="userName">Writer</span> 👋
+                </h1>
+
+                <p>
+                    Manage your published stories and share
+                    new ideas with the BlogSpace community.
+                </p>
+
+            </div>
+
+            <a href="create-blog.html" class="primary-btn">
+                + Create New Blog
+            </a>
+
+        </section>
+
+
+        <!-- STATS -->
+
+        <section class="dashboard-stats">
+
+            <div class="stat-card">
+
+                <p>Total Blogs</p>
+
+                <h2 id="totalBlogs">
+                    0
+                </h2>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <p>Account</p>
+
+                <h2>Active</h2>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <p>Role</p>
+
+                <h2>Writer</h2>
+
+            </div>
+
+        </section>
+
+
+        <!-- BLOGS -->
+
+        <section class="my-blogs">
+
+            <div class="dashboard-section-heading">
+
+                <div>
+                    <p class="section-small">
+                        YOUR CONTENT
+                    </p>
+
+                    <h2>My Blogs</h2>
+                </div>
+
+            </div>
+
+
+            <div id="dashboardBlogs"
+                 class="dashboard-blog-list">
+            </div>
+
+
+            <!-- EMPTY STATE -->
+
+            <div class="empty-state"
+                 id="emptyState">
+
+                <div class="empty-icon">
+                    ✍️
+                </div>
+
+                <h3>
+                    No blogs yet
+                </h3>
+
+                <p>
+                    You haven't published any blogs.
+                    Create your first story today.
+                </p>
+
+                <a href="create-blog.html"
+                   class="primary-btn">
+
+                    Write Your First Blog
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+<script src="js/main.js"></script>
+<script src="js/dashboard.js"></script>
+
+</body>
+</html>
