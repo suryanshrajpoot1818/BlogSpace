@@ -7,26 +7,18 @@
 // MOBILE NAVBAR
 // ======================================
 
-const menuBtn =
-    document.getElementById("menuBtn");
-
-const navLinks =
-    document.getElementById("navLinks");
-
+const menuBtn = document.getElementById("menuBtn");
+const navLinks = document.getElementById("navLinks");
 
 if (menuBtn && navLinks) {
 
-    menuBtn.addEventListener(
-        "click",
-        function () {
+    menuBtn.addEventListener("click", function () {
 
-            navLinks.classList.toggle("show");
+        navLinks.classList.toggle("show");
 
-        }
-    );
+    });
 
 }
-
 
 
 // ======================================
@@ -38,11 +30,9 @@ const defaultBlogs = [
     {
         id: 1001,
 
-        title:
-            "The Future of Artificial Intelligence",
+        title: "The Future of Artificial Intelligence",
 
-        category:
-            "Technology",
+        category: "Technology",
 
         description:
             "Discover how artificial intelligence is changing the way we learn, work and build technology.",
@@ -58,25 +48,21 @@ However, AI should be used responsibly. Human creativity, critical thinking and 
 
 The future of AI is not simply about replacing humans. It is about helping people become more productive and solve difficult problems.`,
 
-        author:
-            "BlogSpace",
+        author: "BlogSpace",
 
-        createdAt:
-            "2026-08-03T10:00:00",
+        createdAt: "2026-08-03T10:00:00",
 
         image:
-            ""
+            "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80"
     },
 
 
     {
         id: 1002,
 
-        title:
-            "Getting Started with Web Development",
+        title: "Getting Started with Web Development",
 
-        category:
-            "Web Development",
+        category: "Web Development",
 
         description:
             "Learn the essential HTML, CSS and JavaScript concepts every frontend developer should know.",
@@ -94,25 +80,21 @@ Once you understand HTML, CSS and JavaScript, you can move toward modern fronten
 
 The best way to learn web development is by building projects and continuously practicing.`,
 
-        author:
-            "BlogSpace",
+        author: "BlogSpace",
 
-        createdAt:
-            "2026-08-01T10:00:00",
+        createdAt: "2026-08-01T10:00:00",
 
         image:
-            ""
+            "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80"
     },
 
 
     {
         id: 1003,
 
-        title:
-            "5 Habits That Make Students Productive",
+        title: "5 Habits That Make Students Productive",
 
-        category:
-            "Productivity",
+        category: "Productivity",
 
         description:
             "Simple habits that can help students manage their time and stay focused on their goals.",
@@ -132,18 +114,15 @@ Finally, consistency is more important than motivation.
 
 Small improvements performed regularly can produce excellent results over time.`,
 
-        author:
-            "BlogSpace",
+        author: "BlogSpace",
 
-        createdAt:
-            "2026-07-29T10:00:00",
+        createdAt: "2026-07-29T10:00:00",
 
         image:
-            ""
+            "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1200&q=80"
     }
 
 ];
-
 
 
 // ======================================
@@ -153,31 +132,23 @@ Small improvements performed regularly can produce excellent results over time.`
 function displayHomeBlogs() {
 
     const blogContainer =
-        document.getElementById(
-            "blogContainer"
-        );
+        document.getElementById("blogContainer");
 
 
-    // This function should only run
-    // on index.html
-
+    // If we are not on home page
     if (!blogContainer) {
         return;
     }
 
 
-    // GET USER CREATED BLOGS
-
+    // Get user-created blogs
     const userBlogs =
         JSON.parse(
-            localStorage.getItem(
-                "blogSpaceBlogs"
-            )
+            localStorage.getItem("blogSpaceBlogs")
         ) || [];
 
 
-    // USER BLOGS FIRST
-
+    // User-created blogs will appear first
     const allBlogs = [
         ...userBlogs,
         ...defaultBlogs
@@ -187,96 +158,77 @@ function displayHomeBlogs() {
     blogContainer.innerHTML = "";
 
 
-    allBlogs.forEach(
-        function (blog, index) {
+    allBlogs.forEach(function (blog, index) {
+
+        const article =
+            document.createElement("article");
 
 
-            const article =
-                document.createElement(
-                    "article"
-                );
+        article.className = "blog-card";
 
 
-            article.className =
-                "blog-card";
+        // ==================================
+        // BLOG IMAGE
+        // ==================================
+
+        let imageHTML;
 
 
-            // --------------------------------
-            // IMAGE
-            // --------------------------------
+        if (blog.image) {
 
-            let imageHTML;
+            imageHTML = `
 
+                <div
+                    class="blog-image"
+                    style="
+                        background-image:
+                        linear-gradient(
+                            rgba(0, 0, 0, 0.10),
+                            rgba(0, 0, 0, 0.25)
+                        ),
+                        url('${blog.image}');
+                    "
+                >
 
-            if (blog.image) {
+                    <span class="category">
+                        ${escapeHTML(blog.category)}
+                    </span>
 
-                imageHTML = `
+                </div>
 
-                    <div
-                        class="blog-image"
-                        style="
-                            background-image:
-                            linear-gradient(
-                                rgba(0,0,0,0.15),
-                                rgba(0,0,0,0.15)
-                            ),
-                            url('${blog.image}');
-                        "
-                    >
+            `;
 
-                        <span class="category">
+        } else {
 
-                            ${escapeHTML(blog.category)}
-
-                        </span>
-
-                    </div>
-
-                `;
-
-            }
-
-            else {
-
-                const gradientClass =
-                    "dynamic-gradient-" +
-                    ((index % 3) + 1);
+            const gradientClass =
+                "dynamic-gradient-" +
+                ((index % 3) + 1);
 
 
-                imageHTML = `
+            imageHTML = `
 
-                    <div
-                        class="
-                            blog-image
-                            ${gradientClass}
-                        "
-                    >
+                <div
+                    class="blog-image ${gradientClass}"
+                >
 
-                        <span class="category">
+                    <span class="category">
+                        ${escapeHTML(blog.category)}
+                    </span>
 
-                            ${escapeHTML(blog.category)}
+                </div>
 
-                        </span>
+            `;
 
-                    </div>
-
-                `;
-
-            }
+        }
 
 
-            // --------------------------------
-            // DATE
-            // --------------------------------
+        // ==================================
+        // DATE
+        // ==================================
 
-            const date =
-                new Date(
-                    blog.createdAt
-                );
-
-
-            const formattedDate =
-                date.toLocaleDateString(
+        const formattedDate =
+            new Date(blog.createdAt)
+                .toLocaleDateString(
                     "en-IN",
                     {
                         day: "2-digit",
@@ -286,67 +238,60 @@ function displayHomeBlogs() {
                 );
 
 
-            // --------------------------------
-            // CARD
-            // --------------------------------
+        // ==================================
+        // BLOG CARD
+        // ==================================
 
-            article.innerHTML = `
+        article.innerHTML = `
 
-                ${imageHTML}
+            ${imageHTML}
 
+            <div class="blog-content">
 
-                <div class="blog-content">
+                <p class="blog-date">
 
-                    <p class="blog-date">
+                    ${formattedDate}
 
-                        ${formattedDate}
-                        •
-                        ${escapeHTML(blog.author)}
+                    •
 
-                    </p>
+                    ${escapeHTML(blog.author)}
 
-
-                    <h3>
-
-                        ${escapeHTML(blog.title)}
-
-                    </h3>
+                </p>
 
 
-                    <p>
-
-                        ${escapeHTML(blog.description)}
-
-                    </p>
+                <h3>
+                    ${escapeHTML(blog.title)}
+                </h3>
 
 
-                    <a
-                        href="blog.html?id=${blog.id}"
-                        class="read-more"
-                    >
-
-                        Read Article →
-
-                    </a>
-
-                </div>
-
-            `;
+                <p>
+                    ${escapeHTML(blog.description)}
+                </p>
 
 
-            blogContainer.appendChild(
-                article
-            );
+                <a
+                    href="blog.html?id=${blog.id}"
+                    class="read-more"
+                >
 
-        }
-    );
+                    Read Article →
+
+                </a>
+
+            </div>
+
+        `;
+
+
+        blogContainer.appendChild(article);
+
+    });
 
 }
 
 
-
 // ======================================
-// SECURITY HELPER
+// SECURITY FUNCTION
 // ======================================
 
 function escapeHTML(text) {
@@ -354,15 +299,15 @@ function escapeHTML(text) {
     const div =
         document.createElement("div");
 
-    div.textContent =
-        text || "";
+    div.textContent = text || "";
 
     return div.innerHTML;
 
 }
 
 
-
-// RUN HOME BLOGS
+// ======================================
+// RUN
+// ======================================
 
 displayHomeBlogs();

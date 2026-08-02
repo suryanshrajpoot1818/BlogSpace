@@ -1,5 +1,5 @@
 // ======================================
-// BLOG READER
+// BLOGSPACE BLOG READER
 // ======================================
 
 
@@ -12,11 +12,9 @@ const readerDefaultBlogs = [
     {
         id: 1001,
 
-        title:
-            "The Future of Artificial Intelligence",
+        title: "The Future of Artificial Intelligence",
 
-        category:
-            "Technology",
+        category: "Technology",
 
         description:
             "Discover how artificial intelligence is changing the way we learn, work and build technology.",
@@ -32,25 +30,21 @@ However, AI should be used responsibly. Human creativity, critical thinking and 
 
 The future of AI is not simply about replacing humans. It is about helping people become more productive and solve difficult problems.`,
 
-        author:
-            "BlogSpace",
+        author: "BlogSpace",
 
-        createdAt:
-            "2026-08-03T10:00:00",
+        createdAt: "2026-08-03T10:00:00",
 
         image:
-            ""
+            "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80"
     },
 
 
     {
         id: 1002,
 
-        title:
-            "Getting Started with Web Development",
+        title: "Getting Started with Web Development",
 
-        category:
-            "Web Development",
+        category: "Web Development",
 
         description:
             "Learn the essential HTML, CSS and JavaScript concepts every frontend developer should know.",
@@ -68,25 +62,21 @@ Once you understand HTML, CSS and JavaScript, you can move toward modern fronten
 
 The best way to learn web development is by building projects and continuously practicing.`,
 
-        author:
-            "BlogSpace",
+        author: "BlogSpace",
 
-        createdAt:
-            "2026-08-01T10:00:00",
+        createdAt: "2026-08-01T10:00:00",
 
         image:
-            ""
+            "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80"
     },
 
 
     {
         id: 1003,
 
-        title:
-            "5 Habits That Make Students Productive",
+        title: "5 Habits That Make Students Productive",
 
-        category:
-            "Productivity",
+        category: "Productivity",
 
         description:
             "Simple habits that can help students manage their time and stay focused on their goals.",
@@ -106,18 +96,15 @@ Finally, consistency is more important than motivation.
 
 Small improvements performed regularly can produce excellent results over time.`,
 
-        author:
-            "BlogSpace",
+        author: "BlogSpace",
 
-        createdAt:
-            "2026-07-29T10:00:00",
+        createdAt: "2026-07-29T10:00:00",
 
         image:
-            ""
+            "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1200&q=80"
     }
 
 ];
-
 
 
 // ======================================
@@ -136,21 +123,19 @@ const blogId =
     );
 
 
-
 // ======================================
-// GET USER BLOGS
+// GET USER CREATED BLOGS
 // ======================================
 
 const savedBlogs =
     JSON.parse(
-        localStorage.getItem(
-            "blogSpaceBlogs"
-        )
+        localStorage.getItem("blogSpaceBlogs")
     ) || [];
 
 
-
-// COMBINE BLOGS
+// ======================================
+// COMBINE ALL BLOGS
+// ======================================
 
 const availableBlogs = [
 
@@ -161,9 +146,8 @@ const availableBlogs = [
 ];
 
 
-
 // ======================================
-// FIND BLOG
+// FIND SELECTED BLOG
 // ======================================
 
 const selectedBlog =
@@ -176,12 +160,10 @@ const selectedBlog =
     );
 
 
-
 const articleContainer =
     document.getElementById(
         "articleContainer"
     );
-
 
 
 // ======================================
@@ -214,14 +196,11 @@ if (!selectedBlog) {
 
     `;
 
-}
-
-else {
+} else {
 
     displayArticle(selectedBlog);
 
 }
-
 
 
 // ======================================
@@ -231,22 +210,23 @@ else {
 function displayArticle(blog) {
 
 
+    // DATE
+
     const formattedDate =
-        new Date(
-            blog.createdAt
-        ).toLocaleDateString(
-            "en-IN",
-            {
-                day: "numeric",
-
-                month: "long",
-
-                year: "numeric"
-            }
-        );
+        new Date(blog.createdAt)
+            .toLocaleDateString(
+                "en-IN",
+                {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                }
+            );
 
 
-    // CONVERT BLOG PARAGRAPHS
+    // ==================================
+    // CONTENT PARAGRAPHS
+    // ==================================
 
     const paragraphs =
         blog.content
@@ -262,7 +242,9 @@ function displayArticle(blog) {
             .join("");
 
 
+    // ==================================
     // COVER IMAGE
+    // ==================================
 
     let coverImage = "";
 
@@ -282,8 +264,11 @@ function displayArticle(blog) {
     }
 
 
-    articleContainer.innerHTML = `
+    // ==================================
+    // DISPLAY ARTICLE
+    // ==================================
 
+    articleContainer.innerHTML = `
 
         <a
             href="index.html#blogs"
@@ -294,7 +279,6 @@ function displayArticle(blog) {
 
 
         <div class="article-header">
-
 
             <span class="article-category">
 
@@ -320,8 +304,11 @@ function displayArticle(blog) {
             <div class="article-meta">
 
                 By
+
                 <strong>
+
                     ${escapeArticleHTML(blog.author)}
+
                 </strong>
 
                 <span>•</span>
@@ -329,7 +316,6 @@ function displayArticle(blog) {
                 ${formattedDate}
 
             </div>
-
 
         </div>
 
@@ -350,11 +336,14 @@ function displayArticle(blog) {
                 Thanks for reading.
             </p>
 
+
             <a
                 href="index.html#blogs"
                 class="primary-btn"
             >
+
                 Explore More Blogs
+
             </a>
 
         </div>
@@ -364,9 +353,8 @@ function displayArticle(blog) {
 }
 
 
-
 // ======================================
-// SECURITY
+// SECURITY FUNCTION
 // ======================================
 
 function escapeArticleHTML(text) {
@@ -374,8 +362,7 @@ function escapeArticleHTML(text) {
     const div =
         document.createElement("div");
 
-    div.textContent =
-        text || "";
+    div.textContent = text || "";
 
     return div.innerHTML;
 
