@@ -56,7 +56,6 @@ The future of AI is not simply about replacing humans. It is about helping peopl
             "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80"
     },
 
-
     {
         id: 1002,
 
@@ -70,15 +69,11 @@ The future of AI is not simply about replacing humans. It is about helping peopl
         content:
             `Web development is a great way to begin your programming journey.
 
-HTML provides the structure of a website. It defines elements such as headings, paragraphs, buttons, images and forms.
+HTML provides the structure of a website.
 
-CSS controls how those elements look. It allows developers to create layouts, colors, animations and responsive designs.
+CSS controls the design and JavaScript adds interactivity.
 
-JavaScript adds functionality and interactivity to websites.
-
-Once you understand HTML, CSS and JavaScript, you can move toward modern frontend technologies such as React.
-
-The best way to learn web development is by building projects and continuously practicing.`,
+Practice projects are the fastest way to become a frontend developer.`,
 
         author: "BlogSpace",
 
@@ -88,7 +83,6 @@ The best way to learn web development is by building projects and continuously p
             "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80"
     },
 
-
     {
         id: 1003,
 
@@ -97,22 +91,12 @@ The best way to learn web development is by building projects and continuously p
         category: "Productivity",
 
         description:
-            "Simple habits that can help students manage their time and stay focused on their goals.",
+            "Simple habits that help students stay focused and achieve more.",
 
         content:
-            `Productivity is not about studying every minute of the day.
+            `Productivity is not about working harder.
 
-The first useful habit is planning your important tasks before starting your day.
-
-Second, avoid unnecessary distractions while studying.
-
-Third, divide large goals into smaller achievable tasks.
-
-Fourth, take proper breaks so that your mind can recover.
-
-Finally, consistency is more important than motivation.
-
-Small improvements performed regularly can produce excellent results over time.`,
+Planning, consistency and avoiding distractions help students become successful.`,
 
         author: "BlogSpace",
 
@@ -124,55 +108,66 @@ Small improvements performed regularly can produce excellent results over time.`
 
 ];
 
-
 // ======================================
-// DISPLAY BLOGS ON HOME PAGE
+// DISPLAY BLOGS
 // ======================================
 
-function displayHomeBlogs() {
+async function displayHomeBlogs() {
 
     const blogContainer =
         document.getElementById("blogContainer");
 
+    if (!blogContainer) return;
 
-    // If we are not on home page
-    if (!blogContainer) {
-        return;
+    let backendBlogs = [];
+
+    try {
+
+        const response =
+            await fetch(
+                "http://localhost:5000/api/blogs"
+            );
+
+        if (response.ok) {
+
+            backendBlogs =
+                await response.json();
+
+        }
+
     }
 
+    catch (error) {
 
-    // Get user-created blogs
-    const userBlogs =
-        JSON.parse(
-            localStorage.getItem("blogSpaceBlogs")
-        ) || [];
+        console.log(
+            "Backend not available"
+        );
 
+    }
 
-    // User-created blogs will appear first
+    // Backend blogs first
     const allBlogs = [
-        ...userBlogs,
+
+        ...backendBlogs,
+
         ...defaultBlogs
+
     ];
 
-
     blogContainer.innerHTML = "";
-
 
     allBlogs.forEach(function (blog, index) {
 
         const article =
             document.createElement("article");
 
+        article.className =
+            "blog-card";
 
-        article.className = "blog-card";
 
+        // IMAGE
 
-        // ==================================
-        // BLOG IMAGE
-        // ==================================
-
-        let imageHTML;
-
+        let imageHTML = "";
 
         if (blog.image) {
 
@@ -183,36 +178,45 @@ function displayHomeBlogs() {
                     style="
                         background-image:
                         linear-gradient(
-                            rgba(0, 0, 0, 0.10),
-                            rgba(0, 0, 0, 0.25)
+                            rgba(0,0,0,0.10),
+                            rgba(0,0,0,0.25)
                         ),
                         url('${blog.image}');
                     "
                 >
 
                     <span class="category">
+
                         ${escapeHTML(blog.category)}
+
                     </span>
 
                 </div>
 
             `;
 
-        } else {
+        }
+
+        else {
 
             const gradientClass =
                 "dynamic-gradient-" +
                 ((index % 3) + 1);
 
-
             imageHTML = `
 
                 <div
-                    class="blog-image ${gradientClass}"
+                    class="
+                        blog-image
+                        ${gradientClass}
+                    "
+
                 >
 
                     <span class="category">
+
                         ${escapeHTML(blog.category)}
+
                     </span>
 
                 </div>
@@ -222,25 +226,23 @@ function displayHomeBlogs() {
         }
 
 
-        // ==================================
         // DATE
-        // ==================================
 
         const formattedDate =
             new Date(blog.createdAt)
-                .toLocaleDateString(
-                    "en-IN",
-                    {
-                        day: "2-digit",
-                        month: "long",
-                        year: "numeric"
-                    }
-                );
+            .toLocaleDateString(
+                "en-IN",
+                {
 
+                    day: "2-digit",
 
-        // ==================================
-        // BLOG CARD
-        // ==================================
+                    month: "long",
+
+                    year: "numeric"
+
+                }
+            );
+
 
         article.innerHTML = `
 
@@ -260,18 +262,25 @@ function displayHomeBlogs() {
 
 
                 <h3>
+
                     ${escapeHTML(blog.title)}
+
                 </h3>
 
 
                 <p>
+
                     ${escapeHTML(blog.description)}
+
                 </p>
 
 
                 <a
+
                     href="blog.html?id=${blog.id}"
+
                     class="read-more"
+
                 >
 
                     Read Article →
@@ -282,8 +291,9 @@ function displayHomeBlogs() {
 
         `;
 
-
-        blogContainer.appendChild(article);
+        blogContainer.appendChild(
+            article
+        );
 
     });
 
@@ -291,7 +301,7 @@ function displayHomeBlogs() {
 
 
 // ======================================
-// SECURITY FUNCTION
+// ESCAPE HTML
 // ======================================
 
 function escapeHTML(text) {
@@ -299,7 +309,8 @@ function escapeHTML(text) {
     const div =
         document.createElement("div");
 
-    div.textContent = text || "";
+    div.textContent =
+        text || "";
 
     return div.innerHTML;
 

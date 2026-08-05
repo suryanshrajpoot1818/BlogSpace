@@ -103,86 +103,81 @@ if (registerForm) {
             }
 
 
-            // GET EXISTING USERS
+           fetch("http://localhost:5000/api/register", {
 
-            const users =
-                JSON.parse(
-                    localStorage.getItem("blogSpaceUsers")
-                ) || [];
+    method: "POST",
 
+    headers: {
 
-            // CHECK EXISTING EMAIL
+        "Content-Type": "application/json"
 
-            const userExists =
-                users.some(
-                    user =>
-                        user.email === email
-                );
+    },
 
+    body: JSON.stringify({
 
-            if (userExists) {
+        name,
+        email,
+        password
 
-                showMessage(
-                    message,
-                    "An account with this email already exists.",
-                    "error"
-                );
+    })
 
-                return;
-            }
+})
 
+.then(response => response.json())
 
-            // CREATE USER
+.then(data => {
 
-            const newUser = {
+    if (data.success) {
 
-                id: Date.now(),
+        showMessage(
 
-                name: name,
+            message,
 
-                email: email,
+            "Account created successfully! Redirecting to login...",
 
-                password: password
+            "success"
 
-            };
+        );
 
+        registerForm.reset();
 
-            // ADD USER
+        setTimeout(function () {
 
-            users.push(newUser);
+            window.location.href = "login.html";
 
+        }, 1200);
 
-            // SAVE USERS
+    }
 
-            localStorage.setItem(
-                "blogSpaceUsers",
-                JSON.stringify(users)
-            );
+    else {
 
+        showMessage(
 
-            showMessage(
-                message,
-                "Account created successfully! Redirecting to login...",
-                "success"
-            );
+            message,
 
+            data.message,
 
-            // CLEAR FORM
+            "error"
 
-            registerForm.reset();
+        );
 
+    }
 
-            // REDIRECT
+})
 
-            setTimeout(
-                function () {
+.catch(() => {
 
-                    window.location.href =
-                        "login.html";
+    showMessage(
 
-                },
-                1200
-            );
+        message,
+
+        "Server error.",
+
+        "error"
+
+    );
+
+});
 
         }
     );
@@ -227,77 +222,86 @@ if (loginForm) {
                     .getElementById("loginMessage");
 
 
-            // GET USERS
+            fetch("http://localhost:5000/api/login", {
 
-            const users =
-                JSON.parse(
-                    localStorage.getItem("blogSpaceUsers")
-                ) || [];
+    method: "POST",
 
+    headers: {
 
-            // FIND USER
+        "Content-Type": "application/json"
 
-            const user =
-                users.find(
-                    storedUser =>
+    },
 
-                        storedUser.email === email &&
-                        storedUser.password === password
-                );
+    body: JSON.stringify({
 
+        email,
+        password
 
-            // WRONG DETAILS
+    })
 
-            if (!user) {
+})
 
-                showMessage(
-                    message,
-                    "Invalid email or password.",
-                    "error"
-                );
+.then(response => response.json())
 
-                return;
-            }
+.then(data => {
 
+    if (data.success) {
 
-            // CURRENT LOGGED-IN USER
+        localStorage.setItem(
 
-            const loggedInUser = {
+            "blogSpaceCurrentUser",
 
-                id: user.id,
+            JSON.stringify(data.user)
 
-                name: user.name,
+        );
 
-                email: user.email
+        showMessage(
 
-            };
+            message,
 
+            "Login successful! Opening dashboard...",
 
-            localStorage.setItem(
-                "blogSpaceCurrentUser",
-                JSON.stringify(loggedInUser)
-            );
+            "success"
 
+        );
 
-            showMessage(
-                message,
-                "Login successful! Opening dashboard...",
-                "success"
-            );
+        setTimeout(function () {
 
+            window.location.href = "dashboard.html";
 
-            // REDIRECT
+        }, 800);
 
-            setTimeout(
-                function () {
+    }
 
-                    window.location.href =
-                        "dashboard.html";
+    else {
 
-                },
-                800
-            );
+        showMessage(
 
+            message,
+
+            data.message,
+
+            "error"
+
+        );
+
+    }
+
+})
+
+.catch(() => {
+
+    showMessage(
+
+        message,
+
+        "Server error.",
+
+        "error"
+
+    );
+
+});
         }
     );
 

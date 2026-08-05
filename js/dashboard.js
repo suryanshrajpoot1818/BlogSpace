@@ -38,217 +38,118 @@ if (userName && currentUser) {
 
 
 // --------------------------------------
-// DISPLAY BLOGS
-// --------------------------------------
+async function displayBlogs() {
 
-function displayBlogs() {
+    const response = await fetch(
+        "http://localhost:5000/api/blogs"
+    );
 
-    const allBlogs =
-        JSON.parse(
-            localStorage.getItem("blogSpaceBlogs")
-        ) || [];
+    const allBlogs = await response.json();
 
+    const userBlogs = allBlogs.filter(
 
-    // ONLY CURRENT USER'S BLOGS
+        blog => blog.author === currentUser.name
 
-    const userBlogs =
-        allBlogs.filter(
-            blog =>
-                blog.authorId === currentUser.id
-        );
-
+    );
 
     const container =
-        document.getElementById(
-            "dashboardBlogs"
-        );
-
+        document.getElementById("dashboardBlogs");
 
     const emptyState =
-        document.getElementById(
-            "emptyState"
-        );
-
+        document.getElementById("emptyState");
 
     const totalBlogs =
-        document.getElementById(
-            "totalBlogs"
-        );
+        document.getElementById("totalBlogs");
 
-
-    // BLOG COUNT
-
-    totalBlogs.textContent =
-        userBlogs.length;
-
-
-    // CLEAR OLD CONTENT
+    totalBlogs.textContent = userBlogs.length;
 
     container.innerHTML = "";
 
-
-    // NO BLOGS
-
     if (userBlogs.length === 0) {
 
-        emptyState.style.display =
-            "block";
+        emptyState.style.display = "block";
 
         return;
+
     }
 
+    emptyState.style.display = "none";
 
-    emptyState.style.display =
-        "none";
+    userBlogs.forEach(blog => {
 
+        const article =
+            document.createElement("article");
 
-    // DISPLAY EACH BLOG
+        article.className =
+            "dashboard-blog";
 
-    userBlogs.forEach(
-        function (blog) {
+        article.innerHTML = `
 
+            <img
+                src="${blog.image || ''}"
+                class="dashboard-blog-image"
+            >
 
-            const blogElement =
-                document.createElement("article");
+            <div class="dashboard-blog-info">
 
+                <span class="dashboard-category">
 
-            blogElement.className =
-                "dashboard-blog";
+                    ${blog.category}
 
+                </span>
 
-            // IMAGE
+                <h3>
 
-            let imageHTML;
+                    ${blog.title}
 
+                </h3>
 
-            if (blog.image) {
+                <p>
 
-                imageHTML = `
-                    <img
-                        src="${blog.image}"
-                        class="dashboard-blog-image"
-                        alt="${blog.title}"
-                    >
-                `;
+                    ${blog.description}
 
-            } else {
+                </p>
 
-                imageHTML = `
-                    <div
-                        class="dashboard-blog-image">
-                    </div>
-                `;
+            </div>
 
-            }
+            <button
+                class="delete-btn"
+                onclick="deleteBlog(${blog.id})">
 
+                Delete
 
-            // DATE
+            </button>
 
-            const formattedDate =
-                new Date(
-                    blog.createdAt
-                ).toLocaleDateString(
-                    "en-IN",
-                    {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric"
-                    }
-                );
+        `;
 
+        container.appendChild(article);
 
-            // BLOG HTML
-
-            blogElement.innerHTML = `
-
-                ${imageHTML}
-
-                <div class="dashboard-blog-info">
-
-                    <span class="dashboard-category">
-
-                        ${blog.category}
-
-                    </span>
-
-                    <h3>
-                        ${blog.title}
-                    </h3>
-
-                    <p>
-                        ${blog.description}
-                    </p>
-
-                    <p>
-                        Published ${formattedDate}
-                    </p>
-
-                </div>
-
-
-                <button
-                    class="delete-btn"
-                    onclick="deleteBlog(${blog.id})">
-
-                    Delete
-
-                </button>
-
-            `;
-
-
-            container.appendChild(
-                blogElement
-            );
-
-        }
-    );
+    });
 
 }
 
 
 
 // --------------------------------------
-// DELETE BLOG
-// --------------------------------------
+async function deleteBlog(blogId) {
 
-function deleteBlog(blogId) {
+    if (
+        !confirm(
+            "Delete this blog?"
+        )
+    ) return;
 
-    const confirmDelete =
-        confirm(
-            "Are you sure you want to delete this blog?"
-        );
+    await fetch(
 
+        `http://localhost:5000/api/blogs/${blogId}`,
 
-    if (!confirmDelete) {
-        return;
-    }
+        {
 
+            method: "DELETE"
 
-    let blogs =
-        JSON.parse(
-            localStorage.getItem("blogSpaceBlogs")
-        ) || [];
+        }
 
-
-    // REMOVE BLOG
-
-    blogs =
-        blogs.filter(
-            blog =>
-                blog.id !== blogId
-        );
-
-
-    // SAVE AGAIN
-
-    localStorage.setItem(
-        "blogSpaceBlogs",
-        JSON.stringify(blogs)
     );
-
-
-    // REFRESH DISPLAY
 
     displayBlogs();
 

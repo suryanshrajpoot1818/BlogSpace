@@ -124,50 +124,78 @@ if (createBlogForm) {
             };
 
 
-            // GET EXISTING BLOGS
+            fetch("http://localhost:5000/api/blogs", {
 
-            const blogs =
-                JSON.parse(
-                    localStorage.getItem("blogSpaceBlogs")
-                ) || [];
+    method: "POST",
 
+    headers: {
 
-            // ADD BLOG AT BEGINNING
+        "Content-Type": "application/json"
 
-            blogs.unshift(newBlog);
+    },
 
+    body: JSON.stringify({
 
-            // SAVE
+        title: title,
 
-            localStorage.setItem(
-                "blogSpaceBlogs",
-                JSON.stringify(blogs)
-            );
+        category: category,
 
+        image: image,
 
-            // SUCCESS MESSAGE
+        description: description,
 
-            message.textContent =
-                "Blog published successfully!";
+        content: content,
 
-            message.className =
-                "form-message success";
+        author: currentUser.name
 
+    })
 
-            createBlogForm.reset();
+})
 
+.then(response => response.json())
 
-            // REDIRECT
+.then(data => {
 
-            setTimeout(
-                function () {
+    if (data.success) {
 
-                    window.location.href =
-                        "dashboard.html";
+        message.textContent =
+            "Blog published successfully!";
 
-                },
-                800
-            );
+        message.className =
+            "form-message success";
+
+        createBlogForm.reset();
+
+        setTimeout(function () {
+
+            window.location.href =
+                "dashboard.html";
+
+        }, 800);
+
+    }
+
+    else {
+
+        message.textContent =
+            data.message;
+
+        message.className =
+            "form-message error";
+
+    }
+
+})
+
+.catch(() => {
+
+    message.textContent =
+        "Server Error";
+
+    message.className =
+        "form-message error";
+
+});
 
         }
     );
